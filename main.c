@@ -45,17 +45,17 @@ char *get_path(char *request) {
 void print_file(const char *path) {
 
   // open file
-  int file_pointer = open(path, O_RDONLY);
-  if (file_pointer == -1) {
+  int file_desctiptor = open(path, O_RDONLY);
+  if (file_desctiptor == -1) {
     printf("Error opening file %s", path);
     return;
   }
 
   // get file size
   struct stat metadata;
-  if (fstat(file_pointer, &metadata) == -1) {
+  if (fstat(file_desctiptor, &metadata) == -1) {
     printf("Error getting file stats\n");
-    close(file_pointer);
+    close(file_desctiptor);
     return;
   }
 
@@ -64,15 +64,15 @@ void print_file(const char *path) {
   if (file_buffer == NULL) {
     printf("Error allocating file read buffer\n");
     free(file_buffer);
-    close(file_pointer);
+    close(file_desctiptor);
     return;
   }
 
   // read file contents into buffer
-  ssize_t bytes_read = read(file_pointer, file_buffer, metadata.st_size);
+  ssize_t bytes_read = read(file_desctiptor, file_buffer, metadata.st_size);
   if (bytes_read == -1) {
     printf("Error reading file\n");
-    close(file_pointer);
+    close(file_desctiptor);
     free(file_buffer);
     return;
   }
@@ -82,7 +82,7 @@ void print_file(const char *path) {
   printf("%s contents:\n\n%s\n", path, file_buffer);
 
   // close file and free buffer
-  close(file_pointer);
+  close(file_desctiptor);
   free(file_buffer);
 }
 
